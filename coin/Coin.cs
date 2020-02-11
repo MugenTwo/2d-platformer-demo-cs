@@ -4,13 +4,13 @@ using System;
 public class Coin : Area2D
 {
 
-    private Boolean taken;
-    
-    public Coin()
+    private bool taken;
+
+    public override void _Ready()
     {
         this.taken = false;
     }
-
+l
     public void OnBodyEnter(Area2D area2D)
     {
         if (!taken && area2D is Player)

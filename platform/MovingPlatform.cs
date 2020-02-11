@@ -3,30 +3,36 @@ using Godot;
 public class MovingPlatform : Node2D
 {
 
+
+    private static readonly float MOMENTUM_CONSTANT_1 = 1.0f;
+    private static readonly float MOMENTUM_CONSTANT_2 = 2.0f;
+    private static readonly float INITIAL_ACCUMULATED_MOMENTUM = 0.0f;
+
     [Export]
-    private Vector2 motion = new Vector2();
+    private Vector2 motion;
     [Export]
     private float cycle;
-    private float accum;
+    private float accumulatedMomentum;
 
-    public MovingPlatform()
+    public override void _Ready()
     {
-        this.cycle = 1.0f;
-        this.accum = 0.0f;
+        this.motion = new Vector2();
+        this.cycle = MOMENTUM_CONSTANT_1;
+        this.accumulatedMomentum = INITIAL_ACCUMULATED_MOMENTUM;
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        this.accum += delta * (1.0f / cycle) * Mathf.Pi * 2.0f;
-        this.accum = this.accum % (Mathf.Pi * 2.0f);
+        this.accumulatedMomentum += delta * (MOMENTUM_CONSTANT_1 / this.cycle) * Mathf.Pi * MOMENTUM_CONSTANT_2;
+        this.accumulatedMomentum = this.accumulatedMomentum % (Mathf.Pi * MOMENTUM_CONSTANT_2);
 
-        float d = Mathf.Sin(this.accum);
-        Transform2D xf = new Transform2D();
+        float distance = Mathf.Sin(this.accumulatedMomentum);
+        Transform2D translation = new Transform2D();
 
-        xf[2] = motion * d;
+        translation.y = motion * distance;
 
         RigidBody2D platform = GetNode("Platform") as RigidBody2D;
-        platform.Transform = xf;
+        platform.Transform = translation;
     }
 
 }
