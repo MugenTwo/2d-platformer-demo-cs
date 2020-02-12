@@ -14,7 +14,7 @@ public class Bullet : RigidBody2D
         this.timer.Start();
     }
 
-    public void disable()
+    public void Disable()
     {
         if (!disabled)
         {

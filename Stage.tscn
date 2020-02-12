@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://coin/Coin.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://player/Player.tscn" type="PackedScene" id=6]
 [ext_resource path="res://enemy/Enemy.tscn" type="PackedScene" id=7]
 [ext_resource path="res://background/ParallaxBg.tscn" type="PackedScene" id=8]
+[ext_resource path="res://platform/MovingPlatform.cs" type="Script" id=9]
 
 [sub_resource type="PhysicsMaterial" id=1]
 friction = 0.0
@@ -188,18 +189,15 @@ position = Vector2( 4172.75, 541.058 )
 
 [node name="MovingPlatform" parent="Props" instance=ExtResource( 3 )]
 position = Vector2( 1451.86, 742.969 )
-motion = Vector2( 0, 140 )
-cycle = 5.0
+script = ExtResource( 9 )
 
 [node name="MovingPlatform 2" parent="Props" instance=ExtResource( 3 )]
 position = Vector2( 624.824, 545.544 )
-motion = Vector2( 300, 0 )
-cycle = 10.0
+script = ExtResource( 9 )
 
 [node name="MovingPlatform 3" parent="Props" instance=ExtResource( 3 )]
 position = Vector2( 3419.86, 739.662 )
-motion = Vector2( 450, 0 )
-cycle = 10.0
+script = ExtResource( 9 )
 
 [node name="Seesaw" parent="Props" instance=ExtResource( 4 )]
 position = Vector2( 2402.79, 849.52 )
