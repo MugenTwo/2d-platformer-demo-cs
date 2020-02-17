@@ -18,16 +18,10 @@ _global_script_classes=[ {
 "class": "Enemy",
 "language": "GDScript",
 "path": "res://enemy/enemy.gd"
-}, {
-"base": "RigidBody2D",
-"class": "Player",
-"language": "GDScript",
-"path": "res://player/player.gd"
 } ]
 _global_script_class_icons={
 "Bullet": "",
-"Enemy": "",
-"Player": ""
+"Enemy": ""
 }
 
 [application]

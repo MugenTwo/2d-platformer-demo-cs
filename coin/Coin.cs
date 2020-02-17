@@ -9,10 +9,10 @@ public class Coin : Area2D
     {
         this.taken = false;
     }
-l
-    public void OnBodyEnter(Area2D area2D)
+    
+    public void OnBodyEnter(RigidBody2D body)
     {
-        if (!taken && area2D is Player)
+        if (!taken && body is Player)
         {
             this.taken = true;
             AnimationPlayer animationPlayer = GetNode("Anim") as AnimationPlayer;

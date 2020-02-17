@@ -57,6 +57,7 @@
     <Compile Include="enemy\Enemy.cs" />
     <Compile Include="platform\MovingPlatform.cs" />
     <Compile Include="player\Bullet.cs" />
+    <Compile Include="player\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
