@@ -60,4 +60,100 @@ public class Player : RigidBody2D
         AddCollisionExceptionWith(bullet);
     }
 
+    public override void _IntegrateForces(Physics2DDirectBodyState bodyState)
+    {
+        Vector2 linearVelocity = bodyState.LinearVelocity;
+        float step = bodyState.Step;
+
+        String newAnimation = this.animation;
+        bool newSidingLeft = this.sidingLeft;
+
+        PlayerInputInteraction playerInputInteraction = ListenToPlayerInput();
+
+        if (playerInputInteraction.Spawn)
+        {
+            Spawn();
+        }
+
+        linearVelocity.x -= this.floorHVelocity;
+        floorHVelocity = 0.0f;
+
+        FloorContact floor = FindFloorContact(bodyState);
+
+    }
+
+    private PlayerInputInteraction ListenToPlayerInput()
+    {
+        bool moveLeft = Input.IsActionPressed("move_left");
+        bool moveRight = Input.IsActionPressed("move_right");
+        bool jump = Input.IsActionPressed("jump");
+        bool shoot = Input.IsActionPressed("shoot");
+        bool spawn = Input.IsActionPressed("spawn");
+
+        return new PlayerInputInteraction(moveLeft, moveRight, jump, shoot, spawn);
+    }
+
+    private void Spawn()
+    {
+        RigidBody2D enemy = this.enemyScene.Instance() as RigidBody2D;
+        Vector2 position = Position;
+
+        position.y = position.y - 100;
+        enemy.Position = position;
+
+        GetParent().AddChild(enemy);
+    }
+
+    private FloorContact FindFloorContact(Physics2DDirectBodyState bodyState)
+    {
+        FloorContact floorContact = new FloorContact(false, -1);
+
+        for (int i = 0; i < bodyState.GetContactCount(); i++)
+        {
+            Vector2 contactLocalNormal = bodyState.GetContactLocalNormal(i);
+
+            if (contactLocalNormal.Dot(new Vector2(0, -1)) > 0.6f)
+            {
+                floorContact.FoundFloor = true;
+                floorContact.FloorIndex = i;
+            }
+        }
+
+        return floorContact;
+    }
+
+    private class FloorContact
+    {
+
+        public bool FoundFloor { get; set; }
+        public int FloorIndex { get; set; }
+
+        public FloorContact(bool foundFloor, int floorIndex)
+        {
+            this.FoundFloor = false;
+            this.FloorIndex = floorIndex;
+        }
+
+    }
+
+    private class PlayerInputInteraction
+    {
+
+        public bool MoveLeft { get; set; }
+        public bool MoveRight { get; set; }
+        public bool Jump { get; set; }
+        public bool Shoot { get; set; }
+        public bool Spawn { get; set; }
+
+        public PlayerInputInteraction(bool moveLeft, bool moveRight, bool jump, bool shoot, bool spawn)
+        {
+            this.MoveLeft = moveLeft;
+            this.MoveRight = moveRight;
+            this.Jump = jump;
+            this.Shoot = shoot;
+            this.Spawn = spawn;
+        }
+
+    }
+
 }
