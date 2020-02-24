@@ -70,15 +70,17 @@ public class Player : RigidBody2D
 
         PlayerInputInteraction playerInputInteraction = ListenToPlayerInput();
 
-        if (playerInputInteraction.Spawn)
-        {
-            Spawn();
-        }
-
         linearVelocity.x -= this.floorHVelocity;
         floorHVelocity = 0.0f;
 
-        FloorContact floor = FindFloorContact(bodyState);
+        FloorContact floorContact = FindFloorContact(bodyState);
+
+        // TODO: The ProcessSpawn() method was located right after getting player inputs in godot code
+        // I think I can move it here without major consequences, but I need to test it
+        ProcessSpawn(playerInputInteraction);
+        ProcessShooting(playerInputInteraction, step);
+        ProcessFloorContact(floorContact, step);
+        linearVelocity = ProcessJump(playerInputInteraction, linearVelocity, step);
 
     }
 
@@ -93,15 +95,66 @@ public class Player : RigidBody2D
         return new PlayerInputInteraction(moveLeft, moveRight, jump, shoot, spawn);
     }
 
-    private void Spawn()
+    private void ProcessSpawn(PlayerInputInteraction playerInputInteraction)
     {
-        RigidBody2D enemy = this.enemyScene.Instance() as RigidBody2D;
-        Vector2 position = Position;
+        if (playerInputInteraction.Spawn)
+        {
+            RigidBody2D enemy = this.enemyScene.Instance() as RigidBody2D;
+            Vector2 position = Position;
 
-        position.y = position.y - 100;
-        enemy.Position = position;
+            position.y = position.y - 100;
+            enemy.Position = position;
 
-        GetParent().AddChild(enemy);
+            GetParent().AddChild(enemy);
+        }
+    }
+
+    private void ProcessShooting(PlayerInputInteraction playerInputInteraction, float step)
+    {
+        if (playerInputInteraction.Shoot && !this.shooting)
+        {
+            CallDeferred("ShotBullet");
+        }
+        else
+        {
+            this.shootTime += step;
+        }
+    }
+
+    private void ProcessFloorContact(FloorContact floorContact, float step)
+    {
+        if (floorContact.FoundFloor)
+        {
+            this.airborneTime = 0.0f;
+        }
+        else
+        {
+            this.airborneTime += step;
+        }
+    }
+
+    private Vector2 ProcessJump(PlayerInputInteraction playerInputInteraction, Vector2 linearVelocity, float step)
+    {
+        if (!this.jumping)
+        {
+            return linearVelocity;
+        }
+
+        if (linearVelocity.y > 0)
+        {
+            this.jumping = false;
+        }
+        else if (!playerInputInteraction.Jump)
+        {
+            this.stoppingJump = true;
+        }
+
+        if (this.stoppingJump)
+        {
+            linearVelocity.y += STOP_JUMP_FORCE * step;
+        }
+
+        return linearVelocity;
     }
 
     private FloorContact FindFloorContact(Physics2DDirectBodyState bodyState)
