@@ -65,9 +65,6 @@ public class Player : RigidBody2D
         Vector2 linearVelocity = bodyState.LinearVelocity;
         float step = bodyState.Step;
 
-        String newAnimation = this.animation;
-        bool newSidingLeft = this.sidingLeft;
-
         PlayerInputInteraction playerInputInteraction = ListenToPlayerInput();
 
         linearVelocity.x -= this.floorHVelocity;
@@ -81,7 +78,7 @@ public class Player : RigidBody2D
         ProcessShooting(playerInputInteraction, step);
         ProcessFloorContact(floorContact, step);
         linearVelocity = ProcessJump(playerInputInteraction, linearVelocity, step);
-
+        linearVelocity = ProcessPlayerMovement(playerInputInteraction, linearVelocity, step);
     }
 
     private PlayerInputInteraction ListenToPlayerInput()
@@ -157,6 +154,21 @@ public class Player : RigidBody2D
         return linearVelocity;
     }
 
+    private Vector2 ProcessPlayerMovement(PlayerInputInteraction playerInputInteraction, Vector2 linearVelocity, float step)
+    {
+
+        bool onFloor = airborneTime < MAX_FLOOR_AIRBORNE_TIME;
+
+        if (onFloor)
+        {
+            linearVelocity = ProcessPlayerDirectionalMovement(playerInputInteraction, linearVelocity, step);
+            linearVelocity = ProcessJumpMovement(playerInputInteraction, linearVelocity, step);
+            ProcessPlayerSiding(playerInputInteraction, linearVelocity);
+        }
+
+        return linearVelocity;
+    }
+
     private FloorContact FindFloorContact(Physics2DDirectBodyState bodyState)
     {
         FloorContact floorContact = new FloorContact(false, -1);
@@ -175,38 +187,89 @@ public class Player : RigidBody2D
         return floorContact;
     }
 
-    private class FloorContact
+    private Vector2 ProcessPlayerDirectionalMovement(PlayerInputInteraction playerInputInteraction, Vector2 linearVelocity, float step)
     {
-
-        public bool FoundFloor { get; set; }
-        public int FloorIndex { get; set; }
-
-        public FloorContact(bool foundFloor, int floorIndex)
+        if (playerInputInteraction.MoveLeft && !playerInputInteraction.MoveRight)
         {
-            this.FoundFloor = false;
-            this.FloorIndex = floorIndex;
+            if (linearVelocity.x > -WALK_MAX_VELOCITY)
+            {
+                linearVelocity.x -= WALK_ACCELERATION * step;
+            }
+        }
+        else if (playerInputInteraction.MoveRight && !playerInputInteraction.MoveLeft)
+        {
+            if (linearVelocity.x < WALK_MAX_VELOCITY)
+            {
+                linearVelocity.x += WALK_ACCELERATION * step;
+            }
+        }
+        else
+        {
+            float linearVelocityX = Mathf.Abs(linearVelocity.x);
+            linearVelocityX -= WALK_DEACCELERATION * step;
+            linearVelocityX = linearVelocityX < 0 ? 0 : linearVelocityX;
+            linearVelocity.x = Mathf.Sign(linearVelocity.x) * linearVelocityX;
         }
 
+        return linearVelocity;
     }
 
-    private class PlayerInputInteraction
+    private Vector2 ProcessJumpMovement(PlayerInputInteraction playerInputInteraction, Vector2 linearVelocity, float step)
     {
-
-        public bool MoveLeft { get; set; }
-        public bool MoveRight { get; set; }
-        public bool Jump { get; set; }
-        public bool Shoot { get; set; }
-        public bool Spawn { get; set; }
-
-        public PlayerInputInteraction(bool moveLeft, bool moveRight, bool jump, bool shoot, bool spawn)
+        if (!this.jumping && playerInputInteraction.Jump)
         {
-            this.MoveLeft = moveLeft;
-            this.MoveRight = moveRight;
-            this.Jump = jump;
-            this.Shoot = shoot;
-            this.Spawn = spawn;
+            linearVelocity.y = -JUMP_VELOCITY;
+            this.jumping = true;
+            this.stoppingJump = false;
+            AudioStreamPlayer2D soundJump = GetNode("SoundJump") as AudioStreamPlayer2D;
+            soundJump.Play();
         }
 
+        return linearVelocity;
+    }
+
+    private void ProcessPlayerSiding(PlayerInputInteraction playerInputInteraction, Vector2 linearVelocity)
+    {
+
+        bool newSidingLeft = this.sidingLeft;
+        if (linearVelocity.x < 0 && playerInputInteraction.MoveLeft)
+        {
+            newSidingLeft = true;
+        }
+        else if (linearVelocity.x > 0 && playerInputInteraction.MoveRight{
+            newSidingLeft = false;
+        }
+
+
+        String newAnimation = this.animation;
+        if (this.jumping)
+        {
+            newAnimation = "jumping";
+        }
+        else if (Mathf.Abs(linearVelocity.x) < 0.1)
+        {
+            if (this.shootTime < MAX_SHOOT_POSE_TIME)
+            {
+                newAnimation = "idle_weapon";
+            }
+            else
+            {
+                newAnimation = "idle";
+            }
+        }
+        else
+        {
+            if (this.shootTime < MAX_SHOOT_POSE_TIME)
+            {
+                newAnimation = "run_weapon";
+            }
+            else
+            {
+                newAnimation = "run";
+            }
+        }
+
+        // TODO: Do something with newSidingLeft and newAnimation
     }
 
 }
