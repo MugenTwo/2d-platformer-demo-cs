@@ -15,7 +15,7 @@ public class Bullet : RigidBody2D
 
     public void Disable()
     {
-        if (!Disabled)
+        if (!this.Disabled)
         {
             AnimationPlayer animationPlayer = GetNode("Anim") as AnimationPlayer;
             animationPlayer.Play("shutdown");

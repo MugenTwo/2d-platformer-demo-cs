@@ -9,15 +9,13 @@ public class MovingPlatform : Node2D
     private static readonly float INITIAL_ACCUMULATED_MOMENTUM = 0.0f;
 
     [Export]
-    private Vector2 motion;
+    private Vector2 motion = new Vector2();
     [Export]
-    private float cycle;
+    private float cycle = 1.0f;
     private float accumulatedMomentum;
 
     public override void _Ready()
     {
-        this.motion = new Vector2();
-        this.cycle = MOMENTUM_CONSTANT_1;
         this.accumulatedMomentum = INITIAL_ACCUMULATED_MOMENTUM;
     }
 

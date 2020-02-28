@@ -188,12 +188,18 @@ position = Vector2( 4172.75, 541.058 )
 
 [node name="MovingPlatform" parent="Props" instance=ExtResource( 3 )]
 position = Vector2( 1451.86, 742.969 )
+motion = Vector2( 0, 140 )
+cycle = 5.0
 
 [node name="MovingPlatform 2" parent="Props" instance=ExtResource( 3 )]
 position = Vector2( 624.824, 545.544 )
+motion = Vector2( 300, 0 )
+cycle = 10.0
 
 [node name="MovingPlatform 3" parent="Props" instance=ExtResource( 3 )]
 position = Vector2( 3419.86, 739.662 )
+motion = Vector2( 450, 0 )
+cycle = 10.0
 
 [node name="Seesaw" parent="Props" instance=ExtResource( 4 )]
 position = Vector2( 2402.79, 849.52 )
@@ -262,3 +268,45 @@ size_flags_horizontal = 2
 size_flags_vertical = 0
 text = "This is a simple demo on how to make a platformer game with Godot.\"This version uses physics and the 2D physics engine for motion and collision.\"\"The demo also shows the benefits of using the scene system, where coins,\"enemies and the player are edited separatedly and instanced in the stage.\"\"To edit the base tiles for the  tileset, open the tileset_edit.tscn file and follow \"instructions.\""
 autowrap = true
+[connection signal="body_entered" from="Coins/Coin" to="Coins/Coin" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin2" to="Coins/Coin2" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin3" to="Coins/Coin3" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin4" to="Coins/Coin4" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin5" to="Coins/Coin5" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin6" to="Coins/Coin6" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin7" to="Coins/Coin7" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin8" to="Coins/Coin8" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin9" to="Coins/Coin9" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin10" to="Coins/Coin10" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin11" to="Coins/Coin11" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin12" to="Coins/Coin12" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin13" to="Coins/Coin13" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin14" to="Coins/Coin14" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin15" to="Coins/Coin15" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin16" to="Coins/Coin16" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin17" to="Coins/Coin17" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin18" to="Coins/Coin18" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin19" to="Coins/Coin19" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin20" to="Coins/Coin20" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin21" to="Coins/Coin21" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin22" to="Coins/Coin22" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin23" to="Coins/Coin23" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin24" to="Coins/Coin24" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin25" to="Coins/Coin25" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin26" to="Coins/Coin26" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin27" to="Coins/Coin27" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin28" to="Coins/Coin28" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin29" to="Coins/Coin29" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin30" to="Coins/Coin30" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin31" to="Coins/Coin31" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin32" to="Coins/Coin32" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin33" to="Coins/Coin33" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin34" to="Coins/Coin34" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin35" to="Coins/Coin35" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin36" to="Coins/Coin36" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin37" to="Coins/Coin37" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin38" to="Coins/Coin38" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin39" to="Coins/Coin39" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin40" to="Coins/Coin40" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin41" to="Coins/Coin41" method="OnBodyEnter"]
+[connection signal="body_entered" from="Coins/Coin42" to="Coins/Coin42" method="OnBodyEnter"]
