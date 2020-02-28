@@ -33,8 +33,8 @@ public class Player : RigidBody2D
         this.stoppingJump = false;
         this.shooting = false;
         this.floorHVelocity = 0.0f;
-        this.airborneTime = 10 ^ 20;
-        this.shootTime = 10 ^ 20;
+        this.airborneTime = Mathf.Pow(10, 20);
+        this.shootTime = Mathf.Pow(10, 20);
         this.bulletScene = ResourceLoader.Load("res://player/Bullet.tscn") as PackedScene;
         this.enemyScene = ResourceLoader.Load("res://enemy/Enemy.tscn") as PackedScene;
     }

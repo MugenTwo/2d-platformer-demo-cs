@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://player/bullet.gd" type="Script" id=1]
+[ext_resource path="res://player/Bullet.cs" type="Script" id=1]
 [ext_resource path="res://player/bullet.png" type="Texture" id=2]
 
 [sub_resource type="CanvasItemMaterial" id=1]
@@ -82,5 +82,4 @@ one_shot = true
 
 [node name="Anim" type="AnimationPlayer" parent="."]
 anims/shutdown = SubResource( 4 )
-
 [connection signal="timeout" from="Timer" to="." method="disable"]

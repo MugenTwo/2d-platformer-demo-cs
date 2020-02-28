@@ -1,6 +1,6 @@
 [gd_scene load_steps=25 format=2]
 
-[ext_resource path="res://player/player.gd" type="Script" id=1]
+[ext_resource path="res://player/Player.cs" type="Script" id=1]
 [ext_resource path="res://player/robot_demo.png" type="Texture" id=2]
 [ext_resource path="res://player/bullet.png" type="Texture" id=3]
 [ext_resource path="res://player/osb_left.png" type="Texture" id=4]
@@ -296,4 +296,3 @@ stream = ExtResource( 8 )
 
 [node name="SoundJump" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 9 )
-

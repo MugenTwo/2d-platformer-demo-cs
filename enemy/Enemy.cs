@@ -46,7 +46,6 @@ public class Enemy : RigidBody2D
 
     public override void _IntegrateForces(Physics2DDirectBodyState bodyState)
     {
-
         String correctAnimation = FindCorrectAnimation();
 
         if (correctAnimation.Equals("walk"))
@@ -74,11 +73,14 @@ public class Enemy : RigidBody2D
             if (contactColliderObject != null && contactColliderObject is Bullet)
             {
                 Bullet contactCollidedBullet = contactColliderObject as Bullet;
-                CallDeferred("BulletCollider", contactCollidedBullet, bodyState, contactLocalNormal);
-                break;
+                if (!contactCollidedBullet.Disabled)
+                {
+                    CallDeferred("BulletCollider", contactCollidedBullet, bodyState, contactLocalNormal);
+                    break;
+                }
             }
 
-            wallSide = FindCorrectWallSide(contactLocalNormal);
+            wallSide = FindCorrectWallSide(contactLocalNormal, wallSide);
         }
 
         int correctDirection = FindCorrectDirection(wallSide);
@@ -121,17 +123,19 @@ public class Enemy : RigidBody2D
         return this.animation;
     }
 
-    private float FindCorrectWallSide(Vector2 contactLocalNormal)
+    private float FindCorrectWallSide(Vector2 contactLocalNormal, float wallSide)
     {
         // Subtract 0.1f for correct float comparison
         if (contactLocalNormal.x > COLLISION_NORMAL_X_COMPONENT - 0.1f)
         {
             return WALL_SIDE;
         }
-        else
+        else if (contactLocalNormal.x < -COLLISION_NORMAL_X_COMPONENT + 0.1f)
         {
             return -WALL_SIDE;
         }
+
+        return wallSide;
     }
 
     private int FindCorrectDirection(float wallSide)
