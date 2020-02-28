@@ -279,7 +279,8 @@ public class Player : RigidBody2D
         {
             newSidingLeft = true;
         }
-        else if (linearVelocity.x > 0 && playerInputInteraction.MoveRight{
+        else if (linearVelocity.x > 0 && playerInputInteraction.MoveRight)
+        {
             newSidingLeft = false;
         }
 
