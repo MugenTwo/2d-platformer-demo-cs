@@ -79,6 +79,16 @@ public class Player : RigidBody2D
         ProcessFloorContact(floorContact, step);
         linearVelocity = ProcessJump(playerInputInteraction, linearVelocity, step);
         linearVelocity = ProcessPlayerMovement(playerInputInteraction, linearVelocity, step);
+
+        this.shooting = playerInputInteraction.Shoot;
+        if (floorContact.FoundFloor)
+        {
+            floorHVelocity = bodyState.GetContactColliderVelocityAtPosition(floorContact.FloorIndex).x;
+            linearVelocity.x += floorHVelocity;
+        }
+
+        linearVelocity += bodyState.TotalGravity * step;
+        bodyState.LinearVelocity = linearVelocity;
     }
 
     private PlayerInputInteraction ListenToPlayerInput()
@@ -164,6 +174,12 @@ public class Player : RigidBody2D
             linearVelocity = ProcessPlayerDirectionalMovement(playerInputInteraction, linearVelocity, step);
             linearVelocity = ProcessJumpMovement(playerInputInteraction, linearVelocity, step);
             ProcessPlayerSiding(playerInputInteraction, linearVelocity);
+            ProcessAnimation(playerInputInteraction, linearVelocity);
+        }
+        else
+        {
+            linearVelocity = ProcessPlayerInAirDirectionalMovement(playerInputInteraction, linearVelocity, step);
+            ProcessInAirAnimation(playerInputInteraction, linearVelocity);
         }
 
         return linearVelocity;
@@ -214,6 +230,33 @@ public class Player : RigidBody2D
         return linearVelocity;
     }
 
+    private Vector2 ProcessPlayerInAirDirectionalMovement(PlayerInputInteraction playerInputInteraction, Vector2 linearVelocity, float step)
+    {
+        if (playerInputInteraction.MoveLeft && !playerInputInteraction.MoveRight)
+        {
+            if (linearVelocity.x > -WALK_MAX_VELOCITY)
+            {
+                linearVelocity.x -= AIR_ACCELERATION * step;
+            }
+        }
+        else if (playerInputInteraction.MoveRight && !playerInputInteraction.MoveLeft)
+        {
+            if (linearVelocity.x < WALK_MAX_VELOCITY)
+            {
+                linearVelocity.x += AIR_ACCELERATION * step;
+            }
+        }
+        else
+        {
+            float linearVelocityX = Mathf.Abs(linearVelocity.x);
+            linearVelocityX -= AIR_DEACCELERATION * step;
+            linearVelocityX = linearVelocityX < 0 ? 0 : linearVelocityX;
+            linearVelocity.x = Mathf.Sign(linearVelocity.x) * linearVelocityX;
+        }
+
+        return linearVelocity;
+    }
+
     private Vector2 ProcessJumpMovement(PlayerInputInteraction playerInputInteraction, Vector2 linearVelocity, float step)
     {
         if (!this.jumping && playerInputInteraction.Jump)
@@ -240,7 +283,11 @@ public class Player : RigidBody2D
             newSidingLeft = false;
         }
 
+        UpdateSidingLeft(newSidingLeft);
+    }
 
+    private void ProcessAnimation(PlayerInputInteraction playerInputInteraction, Vector2 linearVelocity)
+    {
         String newAnimation = this.animation;
         if (this.jumping)
         {
@@ -269,7 +316,63 @@ public class Player : RigidBody2D
             }
         }
 
-        // TODO: Do something with newSidingLeft and newAnimation
+        UpdateAnimation(newAnimation);
+    }
+
+    private void ProcessInAirAnimation(PlayerInputInteraction playerInputInteraction, Vector2 linearVelocity)
+    {
+        String newAnimation = this.animation;
+        if (linearVelocity.y < 0)
+        {
+            if (this.shootTime < MAX_SHOOT_POSE_TIME)
+            {
+                newAnimation = "jumping_weapon";
+            }
+            else
+            {
+                newAnimation = "jumping";
+            }
+        }
+        else
+        {
+            if (this.shootTime < MAX_SHOOT_POSE_TIME)
+            {
+                newAnimation = "falling_weapon";
+            }
+            else
+            {
+                newAnimation = "falling_weapon";
+            }
+        }
+
+        UpdateAnimation(newAnimation);
+    }
+
+    private void UpdateSidingLeft(bool newSidingLeft)
+    {
+        Sprite sprite = GetNode("Sprite") as Sprite;
+        Vector2 scale = sprite.Scale;
+        if (!newSidingLeft.Equals(this.sidingLeft))
+        {
+            scale.x = -1;
+        }
+        else
+        {
+            scale.x = 1;
+        }
+
+        sprite.Scale = scale;
+        this.sidingLeft = newSidingLeft;
+    }
+
+    private void UpdateAnimation(String newAnimation)
+    {
+        if (!newAnimation.Equals(this.animation))
+        {
+            this.animation = newAnimation;
+            AnimationPlayer animationPlayer = GetNode("Anim") as AnimationPlayer;
+            animationPlayer.Play(this.animation);
+        }
     }
 
 }
