@@ -355,11 +355,15 @@ public class Player : RigidBody2D
         Vector2 scale = sprite.Scale;
         if (!newSidingLeft.Equals(this.sidingLeft))
         {
-            scale.x = -1;
-        }
-        else
-        {
-            scale.x = 1;
+            if (newSidingLeft)
+            {
+                scale.x = -1;
+            }
+            else
+            {
+                scale.x = 1;
+            }
+
         }
 
         sprite.Scale = scale;
