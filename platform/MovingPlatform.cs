@@ -3,7 +3,6 @@ using Godot;
 public class MovingPlatform : Node2D
 {
 
-
     private static readonly float MOMENTUM_CONSTANT_1 = 1.0f;
     private static readonly float MOMENTUM_CONSTANT_2 = 2.0f;
     private static readonly float INITIAL_ACCUMULATED_MOMENTUM = 0.0f;
@@ -25,12 +24,12 @@ public class MovingPlatform : Node2D
         this.accumulatedMomentum = this.accumulatedMomentum % (Mathf.Pi * MOMENTUM_CONSTANT_2);
 
         float distance = Mathf.Sin(this.accumulatedMomentum);
-        Transform2D translation = new Transform2D();
+        Transform2D transform = Transform2D.Identity;
 
-        translation.y = motion * distance;
+        transform.origin = motion * distance;
 
         RigidBody2D platform = GetNode("Platform") as RigidBody2D;
-        platform.Transform = translation;
+        platform.Transform = transform;
     }
 
 }
