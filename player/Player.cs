@@ -72,8 +72,6 @@ public class Player : RigidBody2D
 
         FloorContact floorContact = FindFloorContact(bodyState);
 
-        // TODO: The ProcessSpawn() method was located right after getting player inputs in godot code
-        // I think I can move it here without major consequences, but I need to test it
         ProcessSpawn(playerInputInteraction);
         ProcessShooting(playerInputInteraction, step);
         ProcessFloorContact(floorContact, step);
